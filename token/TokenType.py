@@ -1,22 +1,30 @@
 from enum import Enum
 
 
-class TokenType(Enum):
-    whitespace = 1
-    text_bold_symbol = 2
-    text_underlined_symbol = 3
-    text_monospaced_symbol = 4
-    text_del_begin = 5
-    text_del_end = 6
-    text_sub_begin = 7
-    text_sub_end = 8
-    text_sup_begin = 9
-    text_sup_end = 10
-    text_code_begin = 11
-    text_code_end = 12
-    heading_level1 = 13
-    heading_level2 = 14
-    heading_level3 = 15
-    heading_level4 = 16
-    heading_level5 = 17
-    heading_level6 = 18
+class AutoNumber(Enum):
+    def __new__(cls):
+        value = len(cls.__members__) + 1
+        obj = object.__new__(cls)
+        obj._value_ = value
+        return obj
+
+
+class TokenType(AutoNumber):
+    whitespace = ()
+    text_bold_symbol = ()
+    text_underlined_symbol = ()
+    text_monospaced_symbol = ()
+    text_del_begin = ()
+    text_del_end = ()
+    text_sub_begin = ()
+    text_sub_end = ()
+    text_sup_begin = ()
+    text_sup_end = ()
+    text_code_begin = ()
+    text_code_end = ()
+    heading_level1 = ()
+    heading_level2 = ()
+    heading_level3 = ()
+    heading_level4 = ()
+    heading_level5 = ()
+    heading_level6 = ()
