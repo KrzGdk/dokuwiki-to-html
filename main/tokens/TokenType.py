@@ -27,3 +27,5 @@ class TokenType(AutoNumber):
     heading_level4 = ()
     heading_level5 = ()
     heading_level6 = ()
+    list_unord_symbol = ()
+    list_ord_symbol = ()

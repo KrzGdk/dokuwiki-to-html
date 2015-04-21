@@ -17,5 +17,7 @@ class Token:
         elif(t == TokenType.text_sup_end) : t = "sup_end"
         elif(t == TokenType.text_sub_begin) : t = "sub_begin"
         elif(t == TokenType.text_sub_end) : t = "sub_end"
+        elif(t == TokenType.list_unord_symbol) : t = "list_unord"
+        elif(t == TokenType.list_ord_symbol) : t = "list_ord"
 		
         return ( t )

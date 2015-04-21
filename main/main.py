@@ -1,5 +1,6 @@
 from tokens.TokenType import TokenType
 from tokens.Token import Token
+import re
 
 token_list = []
 
@@ -37,13 +38,13 @@ with open('../test.txt', 'r') as file:
                 token_list.append(Token(TokenType.heading_level1))
                 i += 1
                 continue
-        elif file_string[i] == "*" and file_string[i+1] == "*":
+        elif i+1 < length - 1 and file_string[i] == "*" and file_string[i+1] == "*":
             token_list.append(Token(TokenType.text_bold_symbol))
             i += 2
-        elif file_string[i] == "/" and file_string[i+1] == "/":
+        elif i+1 < length - 1 and file_string[i] == "/" and file_string[i+1] == "/":
             token_list.append(Token(TokenType.text_italics_symbol))
             i += 2
-        elif file_string[i] == "_" and file_string[i+1] == "_":
+        elif i+1 < length - 1 and file_string[i] == "_" and file_string[i+1] == "_":
             token_list.append(Token(TokenType.text_underlined_symbol))
             i += 2
         elif file_string[i] == "<":		
@@ -73,8 +74,24 @@ with open('../test.txt', 'r') as file:
                i += 5
             i += 1
             continue
+        elif (re.match(r'\n  \s*\*',file_string[i:])):
+            it = re.finditer(r'\*',file_string[i:])
+            for match in it:
+               off = match.start()
+               break
+            token_list.append(Token(TokenType.list_unord_symbol))
+            i += off
+            continue
+        elif (re.match(r'\n  \s*-',file_string[i:])):
+            it = re.finditer(r'-',file_string[i:])
+            for match in it:
+               off = match.start()
+               break
+            token_list.append(Token(TokenType.list_ord_symbol))
+            i += off
+            continue
         else:
-            print(i)
+           # print(i)
             print(file_string[i])
             i += 1
 
