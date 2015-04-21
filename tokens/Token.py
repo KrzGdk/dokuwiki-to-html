@@ -24,6 +24,16 @@ class Token:
             return "//"
         elif self.token_type == TokenType.text_underlined_symbol:
             return "__"
+        elif self.token_type == TokenType.cell_merge_symbol:
+            return ":::"
+        elif self.token_type == TokenType.tab_heading_sep:
+            return "^"
+        elif self.token_type == TokenType.tab_normal_sep:
+            return "|"
+        elif self.token_type == TokenType.tab_left_margin or self.token_type == TokenType.tab_right_margin:
+            return "  "
+        elif self.token_type == TokenType.tab_row_end:
+            return "\n"
         else:
             return "dupa"
 
