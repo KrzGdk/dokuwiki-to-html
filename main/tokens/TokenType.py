@@ -11,6 +11,7 @@ class AutoNumber(Enum):
 class TokenType(AutoNumber):
     whitespace = ()
     text_bold_symbol = ()
+    text_italics_symbol = ()
     text_underlined_symbol = ()
     text_monospaced_symbol = ()
     text_del_begin = ()
@@ -29,3 +30,9 @@ class TokenType(AutoNumber):
     heading_level6 = ()
     list_unord_symbol = ()
     list_ord_symbol = ()
+    cell_merge_symbol = ()
+    tab_heading_sep = ()
+    tab_normal_sep = ()
+    tab_left_margin = ()
+    tab_right_margin = ()
+    tab_row_end = ()
