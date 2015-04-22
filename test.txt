@@ -1,2 +1,6 @@
-^  dupa  ^  sadsa ^
-|  qweqw |  :::  |
+^  row 1 col 1  ^  row 1 col 2 ^
+|  row 2 col 1 |  :::  |
+
+jakis **tekst**
+
+[[http://www.google.com/#sekcja|gogle]]
