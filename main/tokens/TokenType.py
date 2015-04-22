@@ -10,6 +10,7 @@ class AutoNumber(Enum):
 
 class TokenType(AutoNumber):
     whitespace = ()
+    new_line = ()
     text_bold_symbol = ()
     text_italics_symbol = ()
     text_underlined_symbol = ()
@@ -36,3 +37,11 @@ class TokenType(AutoNumber):
     tab_left_margin = ()
     tab_right_margin = ()
     tab_row_end = ()
+    content = ()
+    link_begin = ()
+    link_url = ()
+    link_section_sep = ()
+    link_section = ()
+    link_text_sep = ()
+    link_text = ()
+    link_end = ()

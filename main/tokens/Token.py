@@ -1,9 +1,10 @@
 from tokens.TokenType import TokenType
 
 class Token:
-    def __init__(self, token):
+    def __init__(self, token, content=""):
         
         self.token = token
+        self.content = content
 
     def __repr__(self):
         print(self.token)
@@ -31,6 +32,15 @@ class Token:
         elif(t == TokenType.tab_heading_sep): t = "^"
         elif(t == TokenType.tab_normal_sep): t = "|"
         elif(t == TokenType.tab_left_margin or t == TokenType.tab_right_margin): t = "  "
-        elif(t == TokenType.tab_row_end): t = "\n"
-		
+        elif(t == TokenType.tab_row_end): t = "ROW_SEP(NEWLINE)"
+        elif self.token == TokenType.content: t = self.content
+        elif self.token == TokenType.link_text: t = self.content 
+        elif self.token == TokenType.link_section: t = self.content
+        elif self.token == TokenType.link_url: t = self.content
+        elif self.token == TokenType.link_begin: t = "[["
+        elif self.token == TokenType.link_section_sep: t = "#"
+        elif self.token == TokenType.link_text_sep: t = "|"
+        elif self.token == TokenType.link_end: t = "]]"
+        else: t = "inne"
+
         return ( t )
