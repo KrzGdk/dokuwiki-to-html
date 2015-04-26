@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class AutoNumber(Enum):
     def __new__(cls):
         value = len(cls.__members__) + 1
@@ -33,15 +34,13 @@ class TokenType(AutoNumber):
     list_ord_symbol = ()
     cell_merge_symbol = ()
     tab_heading_sep = ()
-    tab_normal_sep = ()
-    tab_left_margin = ()
-    tab_right_margin = ()
+    pipe_symbol = ()
+    two_spaces = ()
     tab_row_end = ()
     content = ()
     link_begin = ()
-    link_url = ()
     link_section_sep = ()
-    link_section = ()
     link_text_sep = ()
-    link_text = ()
     link_end = ()
+    footnote_begin = ()
+    footnote_end = ()
