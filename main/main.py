@@ -159,42 +159,42 @@ with open('../test.txt', 'r') as file:
         elif file_string[i] == "^":
             token_list.append(Token(TokenType.content, content))
             content = ""
-            token_list.append(TokenType.tab_heading_sep)
+            token_list.append(Token(TokenType.tab_heading_sep))
             i += 1
         elif file_string[i] == "|":
             token_list.append(Token(TokenType.content, content))
             content = ""
-            token_list.append(TokenType.pipe_symbol)
+            token_list.append(Token(TokenType.pipe_symbol))
             i += 1
         elif i + 2 <= length - 1 and file_string[i] == ":" and file_string[i + 1] == ":" and file_string[i + 2] == ":":
             token_list.append(Token(TokenType.content, content))
             content = ""
-            token_list.append(TokenType.cell_merge_symbol)
+            token_list.append(Token(TokenType.cell_merge_symbol))
             i += 3
         elif file_string[i] == "\n":
             token_list.append(Token(TokenType.content, content))
             content = ""
-            token_list.append(TokenType.new_line)
+            token_list.append(Token(TokenType.new_line))
             i += 1
         elif i + 1 <= length - 1 and file_string[i] == "[" and file_string[i + 1] == "[":
             token_list.append(Token(TokenType.content, content))
             content = ""
-            token_list.append(TokenType.link_begin)
+            token_list.append(Token(TokenType.link_begin))
             i += 2
         elif i + 1 <= length - 1 and file_string[i] == "]" and file_string[i + 1] == "]":
             token_list.append(Token(TokenType.content, content))
             content = ""
-            token_list.append(TokenType.link_end)
+            token_list.append(Token(TokenType.link_end))
             i += 2
         elif file_string[i] == "#":
             token_list.append(Token(TokenType.content, content))
             content = ""
-            token_list.append(TokenType.link_section_sep)
+            token_list.append(Token(TokenType.link_section_sep))
             i += 1
         elif i + 1 <= length - 1 and file_string[i] == " " and file_string[i+1] == " ":
             token_list.append(Token(TokenType.content, content))
             content = ""
-            token_list.append(TokenType.two_spaces)
+            token_list.append(Token(TokenType.two_spaces))
             i += 1
         else:
             content += file_string[i]
