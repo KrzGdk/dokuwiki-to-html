@@ -83,15 +83,15 @@ with open('../test.txt', 'r') as file:
             content = ""
             token_list.append(Token(TokenType.footnote_end))
             i += 2
-        elif i + 1 <= length - 1 and file_string[i] == "(" and file_string[i + 1] == "(":
+        elif i + 1 <= length - 1 and file_string[i] == "{" and file_string[i + 1] == "{":
             token_list.append(Token(TokenType.content, content))
             content = ""
-            token_list.append(Token(TokenType.footnote_begin))
+            token_list.append(Token(TokenType.image_begin))
             i += 2
-        elif i + 1 <= length - 1 and file_string[i] == ")" and file_string[i + 1] == ")":
+        elif i + 1 <= length - 1 and file_string[i] == "}" and file_string[i + 1] == "}":
             token_list.append(Token(TokenType.content, content))
             content = ""
-            token_list.append(Token(TokenType.footnote_end))
+            token_list.append(Token(TokenType.image_end))
             i += 2
         elif file_string[i] == "<":
             if file_string[i + 1:i + 5] == "del>":

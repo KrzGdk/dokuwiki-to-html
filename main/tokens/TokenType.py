@@ -44,3 +44,5 @@ class TokenType(AutoNumber):
     link_end = ()
     footnote_begin = ()
     footnote_end = ()
+    image_begin = ()
+    image_end = ()

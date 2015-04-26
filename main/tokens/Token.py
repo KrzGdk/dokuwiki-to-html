@@ -69,6 +69,10 @@ class Token:
             t = "footnote_begin"
         elif self.token == TokenType.footnote_end:
             t = "footnote_end"
+        elif self.token == TokenType.image_begin:
+            t = "image_begin"
+        elif self.token == TokenType.image_end:
+            t = "image_end"
         elif self.token == TokenType.link_end:
             t = "link_end"
         else:
