@@ -12,6 +12,9 @@ with open('../test.txt', 'r') as file:
     content = ""
     length = len(file_string)
     while i < length:
+        if i + 1 <= length - 1 and file_string[i] == "\\":
+            content += file_string[i+1]
+            i += 2
         if file_string[i] == "=":
             if i + 1 <= length - 1 and file_string[i + 1] == "=":
                 if i + 2 <= length - 1 and file_string[i + 2] == "=":
