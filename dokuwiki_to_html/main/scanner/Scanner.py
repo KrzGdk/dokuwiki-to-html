@@ -66,7 +66,7 @@ class Scanner:
                 elif i + 1 <= length - 1 and file_string[i] == "/" and file_string[i + 1] == "/":
                     token_list.append(Token(TokenType.content, content))
                     content = ""
-                    token_list.append(Token(TokenType.text_italics_symbol))
+                    token_list.append(Token(TokenType.text_italics_symbol, "//"))
                     i += 2
                 elif i + 1 <= length - 1 and file_string[i] == "_" and file_string[i + 1] == "_":
                     token_list.append(Token(TokenType.content, content))

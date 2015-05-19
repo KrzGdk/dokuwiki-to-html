@@ -1,5 +1,5 @@
 from dokuwiki_to_html.main.tokens.TokenType import TokenType
-from dokuwiki_to_html.main.parser.ParseException import ParseException
+from dokuwiki_to_html.main.parser.ParseError import ParseError
 
 class Parser:
 
@@ -14,6 +14,12 @@ class Parser:
         self.next_token_index += 1
 
     def parse(self):
+        try:
+            return self.do_parse()
+        except:
+            raise ParseError
+
+    def do_parse(self):
         self.read_next_token()
         while self.next_token_index < len(self.token_list):
             if self.current_token.is_heading():
@@ -32,6 +38,9 @@ class Parser:
                 self.result_list.append(self.parse_table())
             elif self.current_token.token == TokenType.list_ord_symbol or self.current_token.token == TokenType.list_unord_symbol :
                 self.result_list.append(self.parse_list())
+            elif self.current_token.token == TokenType.new_line and self.token_list[self.next_token_index].token == TokenType.new_line:
+                self.result_list.append({"new_paragraph"})
+                self.read_next_token()
             try:
                 self.read_next_token()
             except IndexError:
@@ -89,6 +98,13 @@ class Parser:
                 self.read_next_token()
             return {'sub': inner_text}
 
+    def parse_code(self):
+        self.read_next_token()
+        inner_text = []
+        while self.current_token.token != TokenType.text_code_end:
+            inner_text.append(self.parse_unformatted())
+            self.read_next_token()
+        return {'code': inner_text}
 
     def parse_footnote(self):
         if(self.current_token.token == TokenType.footnote_begin ):
@@ -96,7 +112,7 @@ class Parser:
             inner_text = self.parse_unformatted()
             self.read_next_token()
             if self.current_token.token != TokenType.footnote_end:
-                raise ParseException
+                raise ParseError
             return {'footnote': inner_text}
 
     def get_alignment(self, cell_text):
@@ -158,7 +174,7 @@ class Parser:
                         cell_text = [x for x in cell_text if x != " "]
                         align = self.get_alignment(cell_text)
                         row.append({'td': [i for i in cell_text if not hasattr(i,'token') or i.token != TokenType.two_spaces], 'align': align})
-            rows.append(row);
+            rows.append(row)
             if self.current_token.token == TokenType.new_line \
                     and self.token_list[self.next_token_index].token not in [TokenType.tab_heading_sep, TokenType.pipe_symbol]:
                 break
@@ -171,7 +187,7 @@ class Parser:
             if self.current_token.is_formatted() or self.current_token.token==TokenType.content:
                 item_content.append(self.parse_text())
             else:
-                raise ParseException
+                raise ParseError
             self.read_next_token()
         return {'ol.li': item_content, 'level' : indents}
 
@@ -182,15 +198,45 @@ class Parser:
             if self.current_token.is_formatted() or self.current_token.token==TokenType.content:
                 item_content.append(self.parse_text())
             else:
-                raise ParseException
+                raise ParseError
             self.read_next_token()
         return {'ul.li': item_content, 'level' : indents}
 
     def parse_image(self):
-        pass
+        self.read_next_token()
+        link_text = ""
+        while self.current_token.token != TokenType.image_end:
+            link_text += self.current_token.content
+            self.read_next_token()
+        link_parts = link_text.partition("?")
+        link = link_parts[0]
+        if link_parts[2] != "":
+            (width, x, height) = tuple(link_parts[2].partition("x"))
+            width = ''.join(filter(lambda x: x.isdigit(), width))
+            height = ''.join(filter(lambda x: x.isdigit(), height))
+            if height != "":
+                return {'img': {'src': link, 'height': height, 'width': width}}
+            return {'img': {'src': link, 'width': width}}
+        return {'img': {'src': link}}
+
 
     def parse_link(self):
-        pass
+        self.read_next_token()
+        link_url = ""
+        while self.current_token.token not in [TokenType.pipe_symbol, TokenType.link_end]:
+            link_url += self.current_token.content
+            self.read_next_token()
+        if self.current_token.token == TokenType.pipe_symbol:
+            self.read_next_token()
+            if self.current_token.token == TokenType.content:
+                link_content = ""
+                while self.current_token.token != TokenType.link_end:
+                    link_content += self.current_token.content
+            elif self.current_token.token == TokenType.image_begin:
+                link_content = self.parse_image()
+            else:
+                raise ParseError
+        return {'link': {'url': link_url, 'content': link_content}}
 
     def parse_text(self):
         if self.current_token.is_formatted():
@@ -204,42 +250,42 @@ class Parser:
             inner_text = self.parse_unformatted()
             self.read_next_token()
             if self.current_token.token != TokenType.heading_level1:
-                raise ParseException
+                raise ParseError
             return {'h1': inner_text}
         elif(self.current_token.token == TokenType.heading_level2 ):
             self.read_next_token()
             inner_text = self.parse_unformatted()
             self.read_next_token()
             if self.current_token.token != TokenType.heading_level2:
-                raise ParseException
+                raise ParseError
             return {'h2': inner_text}
         elif(self.current_token.token == TokenType.heading_level3 ):
             self.read_next_token()
             inner_text = self.parse_unformatted()
             self.read_next_token()
             if self.current_token.token != TokenType.heading_level3:
-                raise ParseException
+                raise ParseError
             return {'h3': inner_text}
         elif(self.current_token.token == TokenType.heading_level4 ):
             self.read_next_token()
             inner_text = self.parse_unformatted()
             self.read_next_token()
             if self.current_token.token != TokenType.heading_level4:
-                raise ParseException
+                raise ParseError
             return {'h4': inner_text}
         elif(self.current_token.token == TokenType.heading_level5 ):
             self.read_next_token()
             inner_text = self.parse_unformatted()
             self.read_next_token()
             if self.current_token.token != TokenType.heading_level5:
-                raise ParseException
+                raise ParseError
             return {'h5': inner_text}
         elif(self.current_token.token == TokenType.heading_level6 ):
             self.read_next_token()
             inner_text = self.parse_unformatted()
             self.read_next_token()
             if self.current_token.token != TokenType.heading_level6:
-                raise ParseException
+                raise ParseError
             return {'h6': inner_text}
 
     def parse_unformatted(self):
