@@ -7,12 +7,16 @@ class Generator:
         self.formattings = ['del', 'bold', 'italics', 'sup', 'sub', 'underlined', 'monospaced']
         self.html_page = ""
         self.struct = struct
+        self.footnote_count = 0
+        self.footnotes = []
 
     def generate_html(self):
         self._generate_headers()
         for item in self.struct:
             self._append_item(item)
 
+        self._append_hr()
+        self._append_footnotes()
         self._generate_footer()
         return self.html_page
 
@@ -28,8 +32,14 @@ class Generator:
                 self._append_formatted(k, v)
             elif k == 'list':
                 self._append_list(v)
+            elif k == 'link':
+                self._append_link(v)
+            elif k == 'img':
+                self._append_image(v)
+            elif k == 'footnote':
+                self._append_footnote(v)
             elif k == 'table':
-                pass
+                self._append_table(v)
         elif isinstance(item, str):
             self._append_unformatted(item)
 
@@ -103,3 +113,80 @@ class Generator:
 
         while len(lists_to_close) > 0:
             self.html_page += "</" + lists_to_close.pop() + ">"
+
+    def _append_link(self, link):
+        self.html_page += "<a href=\"" + link['url'] + "\">"
+        if isinstance(link['content'], str):
+            self._append_formatted_or_unformatted(link['content'])
+        else:
+            self._append_image(link['content']['img'])
+        self.html_page += "</a>"
+
+    def _append_image(self, img):
+        self.html_page += "<img src=\"" + img['src'] + "\" style=\""
+        if 'height' in img:
+            self.html_page += "height:" + img['height'] + "px;"
+        if 'width' in img:
+            self.html_page += "width:" + img['width'] + "px"
+        self.html_page += "\" />"
+
+    def _append_footnote(self, v):
+        self.footnote_count += 1
+        self.html_page += "<sup><a href=\"#fn" + str(self.footnote_count) + "\" id=\"ref" + str(self.footnote_count) \
+                          + "\">" + str(self.footnote_count) + ")</a></sup>"
+        self.footnotes.append(v)
+
+    def _append_footnotes(self):
+        self.html_page += "</p><p>"
+        for i, footnote in enumerate(self.footnotes):
+            idx = str(i+1)
+            self.html_page += "<sup id=\"fn" + idx + "\">"
+            self.html_page += idx + ") </sup>"
+            self.html_page += footnote
+            self.html_page += "<a href=\"#ref" + idx + "\" "
+            self.html_page += "title=\"Skocz do przypisu " + idx + ".\">^</a></sup>"
+
+    def _append_hr(self):
+        self.html_page += "<hr/>"
+
+    def _append_table(self, v):
+        numrows = len(v)
+        if numrows < 1:
+            return
+        numcols = len(v[0])
+        self.html_page += '<table>'
+        merged_cells = []
+        for r, row in enumerate(v):
+            for c, col in enumerate(row):
+                if 'th' in col:
+                    for s in col['th']:
+                        if isinstance(s, set):
+                            merged_cells.append((r, c))
+                elif 'td' in col:
+                    for s in col['td']:
+                        if isinstance(s, set):
+                            merged_cells.append((r, c))
+
+        for r, row in enumerate(v):
+            self.html_page += '<tr>'
+            for c, col in enumerate(row):
+                if (r, c) in merged_cells:
+                    continue
+                rowspan = 1
+                nextrow = r + 1
+                if (nextrow, c) in merged_cells:
+                    rowspan = 2
+                    nextrow += 1
+                    while (nextrow, c) in merged_cells:
+                        rowspan += 1
+                        nextrow += 1
+                align = col['align']
+                if 'th' in col:
+                    self.html_page += '<th rowspan=' + str(rowspan) + ' style="text-align:' + align + '">'
+                    self._append_formatted_or_unformatted_list(col['th'])
+                    self.html_page += '</th>'
+                elif 'td' in col:
+                    self.html_page += '<td rowspan=' + str(rowspan) + ' style="text-align:' + align + '">'
+                    self._append_formatted_or_unformatted_list(col['td'])
+                    self.html_page += '</td>'
+        self.html_page += '</table>'
