@@ -86,6 +86,8 @@ class Generator:
             return 'u'
         elif tag == 'del':
             return 'strike'
+        elif tag == 'monospaced':
+            return 'code'
         else:
             return tag
 
