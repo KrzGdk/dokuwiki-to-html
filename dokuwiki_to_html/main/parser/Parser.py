@@ -232,6 +232,7 @@ class Parser:
             if self.current_token.token == TokenType.content:
                 while self.current_token.token != TokenType.link_end:
                     link_content += self.current_token.content
+                    self.read_next_token()
             elif self.current_token.token == TokenType.image_begin:
                 link_content = self.parse_image()
             else:

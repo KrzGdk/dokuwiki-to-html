@@ -1,7 +1,7 @@
 from pprint import pprint
 from dokuwiki_to_html.main.parser.Parser import Parser
 from dokuwiki_to_html.main.scanner.Scanner import Scanner
-from dokuwiki_to_html.main.generator.Generator import Generator
+from dokuwiki_to_html.main.generator.generator import Generator
 
 
 scanner = Scanner()
