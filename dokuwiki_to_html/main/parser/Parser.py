@@ -223,13 +223,13 @@ class Parser:
     def parse_link(self):
         self.read_next_token()
         link_url = ""
+        link_content = ""
         while self.current_token.token not in [TokenType.pipe_symbol, TokenType.link_end]:
             link_url += self.current_token.content
             self.read_next_token()
         if self.current_token.token == TokenType.pipe_symbol:
             self.read_next_token()
             if self.current_token.token == TokenType.content:
-                link_content = ""
                 while self.current_token.token != TokenType.link_end:
                     link_content += self.current_token.content
             elif self.current_token.token == TokenType.image_begin:
