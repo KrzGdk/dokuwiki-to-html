@@ -102,6 +102,10 @@ class Parser:
         self.read_next_token()
         inner_text = []
         while self.current_token.token != TokenType.text_code_end:
+            if self.current_token.token == TokenType.two_spaces:
+                inner_text.append("  ")
+            if self.current_token.token == TokenType.new_line:
+                inner_text.append("\n")
             inner_text.append(self.parse_unformatted())
             self.read_next_token()
         return {'code': inner_text}

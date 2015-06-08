@@ -30,6 +30,8 @@ class Generator:
                 self._append_h_tag(k, v)
             elif k in self.formattings:
                 self._append_formatted(k, v)
+            elif k == 'code':
+                self._append_code(v)
             elif k == 'list':
                 self._append_list(v)
             elif k == 'link':
@@ -139,7 +141,7 @@ class Generator:
     def _append_footnotes(self):
         self.html_page += "</p><p>"
         for i, footnote in enumerate(self.footnotes):
-            idx = str(i+1)
+            idx = str(i + 1)
             self.html_page += "<sup id=\"fn" + idx + "\">"
             self.html_page += idx + ") </sup>"
             self.html_page += footnote
@@ -182,11 +184,18 @@ class Generator:
                         nextrow += 1
                 align = col['align']
                 if 'th' in col:
-                    self.html_page += '<th rowspan=' + str(rowspan) + ' style="text-align:' + align + '">'
+                    self.html_page += '<th rowspan=' + str(
+                        rowspan) + ' style="text-align:' + align + ';vertical-align:top">'
                     self._append_formatted_or_unformatted_list(col['th'])
                     self.html_page += '</th>'
                 elif 'td' in col:
-                    self.html_page += '<td rowspan=' + str(rowspan) + ' style="text-align:' + align + '">'
+                    self.html_page += '<td rowspan=' + str(
+                        rowspan) + ' style="text-align:' + align + ';vertical-align:top">'
                     self._append_formatted_or_unformatted_list(col['td'])
                     self.html_page += '</td>'
         self.html_page += '</table>'
+
+    def _append_code(self, v):
+        self.html_page += "<pre>"
+        self._append_formatted_or_unformatted_list(v)
+        self.html_page += "</pre>"

@@ -14,5 +14,12 @@
 gdfgdf
 dgfgfdgdf
 
+<code>
+int main(void){
+    int x;
+}
+    
+</code>
+
 dsgdfgfd
 **__//dasdad//__**
