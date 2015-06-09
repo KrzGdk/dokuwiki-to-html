@@ -1,14 +1,14 @@
 ===abc===
 <del>ala</del>
   *dasda
-  -a**dsda**da
- f  n - dasda
+  ***dsda**da
+  - dasda
 ** bold **
 
 ^ Heading 1      ^ Heading 2                  ^ Heading 3          ^
 | Row 1 Col 1    | this cell spans vertically | Row 1 Col 3        |
 | Row 2 Col 1    | :::                        | Row 2 Col 3        |
-| Row 3 Col 1    |   gfdgdf | Row 3 Col 3        |
+| Row 3 Col 1    | :::                        | Row 2 Col 3        |
 
 [[http://www.google.pl|{{https://www.dokuwiki.org/_media/wiki:dokuwiki-128.png?325x200}}]] ((link do google))
 gdfgdf
@@ -18,7 +18,6 @@ dgfgfdgdf
 int main(void){
     int x;
 }
-    
 </code>
 
 ''dsgdfgfd''
