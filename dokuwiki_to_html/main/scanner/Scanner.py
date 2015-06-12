@@ -14,6 +14,12 @@ class Scanner:
             content = ""
             length = len(file_string)
             while i < length:
+                if file_string[i] == "\n":
+                    token_list.append(Token(TokenType.content, content))
+                    content = ""
+                    token_list.append(Token(TokenType.new_line))
+                    i += 1
+                    continue
                 if i + 1 <= length - 1 and file_string[i] == "\\":
                     content += file_string[i + 1]
                     i += 2
@@ -180,11 +186,6 @@ class Scanner:
                     content = ""
                     token_list.append(Token(TokenType.cell_merge_symbol))
                     i += 3
-                elif file_string[i] == "\n":
-                    token_list.append(Token(TokenType.content, content))
-                    content = ""
-                    token_list.append(Token(TokenType.new_line))
-                    i += 1
                 elif i + 1 <= length - 1 and file_string[i] == "[" and file_string[i + 1] == "[":
                     token_list.append(Token(TokenType.content, content))
                     content = ""
@@ -209,6 +210,6 @@ class Scanner:
                     content += file_string[i]
                     i += 1
             content = ""
-            token_list = [x for x in token_list if x.token!=TokenType.content or(x.token==TokenType.content and x.content != "")]
+            token_list = [x for x in token_list if x.token != TokenType.content or(x.token == TokenType.content and x.content != "")]
 
         return token_list
